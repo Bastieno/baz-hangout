@@ -15,7 +15,8 @@ const meetupsRoutes = require('./routes/meetups'),
       postsRoutes = require('./routes/posts'),
       categoriesRoutes = require('./routes/categories');
 
-mongoose.connect(config.DB_URI, { useNewUrlParser: true })
+
+mongoose.connect(config.DB_URI, { useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true  })
   .then(() => console.log('DB Connected!'))
   .catch(err => console.log(err));
 
@@ -32,5 +33,5 @@ app.use('/api/v1/categories', categoriesRoutes);
 const PORT = process.env.PORT || 3001;
 
 app.listen(PORT , function() {
-  console.log('App is running on port: ' + PORT);
+  console.log(`Server is running on port ${PORT}`);
 });

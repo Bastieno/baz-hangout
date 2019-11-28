@@ -197,7 +197,17 @@
 </template>
 
 <script>
+import axios from 'axios'
   export default {
+    data() {
+      return {
+        categories: []
+      }
+    },
+    created() {
+      axios.get('/api/v1/categories')
+        .then(res => console.log(res.data))
+    }
   }
 </script>
 

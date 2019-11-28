@@ -27,8 +27,7 @@ class DB {
 
   async pushDataToDb() {
     await this.categories.forEach(async (category) => {
-       const newCategory = new Category(category);
-       await newCategory.save(() => {});
+       await (new Category(category)).save(() => {});
     })
 
     await this.users.forEach(async user => {
@@ -56,7 +55,7 @@ class DB {
   }
 }
 
-mongoose.connect(config.DB_URI, { useNewUrlParser: true })
+mongoose.connect(config.DB_URI, { useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true })
   .then(async () => {
     const db = new DB();
     await db.seedDb();
