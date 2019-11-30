@@ -1,5 +1,5 @@
 <template>
-  <div v-if="meetupLength" class="meetup-detail-page">
+  <div class="meetup-detail-page">
     <section class="hero">
       <div class="hero-body">
         <div class="container">
@@ -136,32 +136,22 @@
 </template>
 
 <script>
-  import axios from 'axios'
   export default {
-    data () {
-      return {
-        meetup: {},
-        threads: {},
-        meetupLength: null
-      }
-    },
     created () {
       const meetupId = this.$route.params.id
 
-      axios.get(`/api/v1/meetups/${meetupId}`)
-        .then(response => {
-          this.meetup = response.data
-          this.meetupLength = Object.keys(this.meetup).length
-        })
-
-      axios.get(`/api/v1/threads?meetupId=${meetupId}`)
-        .then(response => {
-          this.threads = response.data
-        })
+      this.$store.dispatch('fetchMeetup', meetupId)
+      this.$store.dispatch('fetchThreads', meetupId)
     },
     computed: {
       meetupCreator () {
-        return this.meetup.meetupCreator
+        return this.meetup.meetupCreator || {}
+      },
+      meetup() {
+        return this.$store.getters['selectMeetup']
+      },
+      threads() {
+        return this.$store.getters['selectThreads']
       }
     }
   }

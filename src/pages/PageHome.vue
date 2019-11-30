@@ -23,7 +23,7 @@
           <div class="columns cover is-multiline is-mobile">
             <CategoryItem
               v-for="category in categories"
-              :key="category.name"
+              :key="category._id"
               :category="category"
             />
           </div>
@@ -34,27 +34,24 @@
 </template>
 
 <script>
-  import axios from 'axios'
+  // import axios from 'axios'
   import CategoryItem from '../components/CategoryItem'
   import MeetupItem from '../components/MeetupItem'
 
   export default {
     components: { CategoryItem, MeetupItem },
-    data() {
-      return {
-        categories: [],
-        meetups: []
+    computed: {
+      meetups() {
+        return this.$store.getters['selectMeetups']
+      },
+      categories() {
+        return this.$store.getters['selectCategories']
       }
     },
     created() {
-      axios.get('/api/v1/categories')
-        .then(response => this.categories = response.data)
-        .catch(error => console.log(error))
-
-      axios.get('/api/v1/meetups')
-        .then(response => this.meetups = response.data)
-        .catch(error => console.log(error))
-    }
+      this.$store.dispatch('fetchMeetups')
+      this.$store.dispatch('fetchCategories')
+    },
   }
 </script>
 

@@ -5,6 +5,7 @@ import AppDropdown from './components/shared/AppDropdown'
 import AppHero from './components/shared/AppHero'
 
 import router from './router'
+import store from './store'
 
 Vue.config.productionTip = false
 
@@ -16,6 +17,7 @@ Vue.filter('capitalize', (word = '') => `${word.charAt(0).toUpperCase()}${word.s
 Vue.filter('formatDate', (value = '', formatType = 'LL') => moment(value).format(formatType))
 
 new Vue({
-  router, 
+  router,
+  store,
   render: h => h(App),
 }).$mount('#app')
