@@ -29,7 +29,6 @@
         <div class="columns cover is-multiline">
           <div v-for="meetup of meetups" :key="meetup._id" class="column is-one-third" :style="{'min-height': '160px'}">
             <router-link :to="'/meetups/' + meetup._id" class="meetup-card-find"
-               href="#"
                :style="{'background-image': `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${meetup.image})`}">
               <div class="meetup-card-find-content">
                 <div class="meetup-card-find-content-date is-pulled-right">
@@ -57,14 +56,18 @@
 </template>
 
 <script>
+  import { mapState, mapActions } from 'vuex'
   export default {
     created () {
-      this.$store.dispatch('fetchMeetups')
+      this.fetchMeetups()
     },
     computed: {
-      meetups() {
-        return this.$store.state.meetups
-      }
+      ...mapState({
+        meetups: state => state.meetups
+      })
+    },
+    methods: {
+      ...mapActions(['fetchMeetups'])
     }
   }
 </script>
