@@ -150,12 +150,14 @@
         return this.meetup.meetupCreator || {}
       },
       ...mapState({
-        meetup: state => state.meetup,
-        threads: state => state.threads
+        meetup: state => state.meetups.item,
+        threads: state => state.threads.items
       })
     },
     methods: {
-      ...mapActions(['fetchMeetup', 'fetchThreads'])
+      ...mapActions('meetups', ['fetchMeetup']),
+      ...mapActions('threads', ['fetchThreads'])
+
     }
   }
 </script>

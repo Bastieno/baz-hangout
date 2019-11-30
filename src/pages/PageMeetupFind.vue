@@ -63,11 +63,11 @@
     },
     computed: {
       ...mapState({
-        meetups: state => state.meetups
+        meetups: state => state.meetups.items
       })
     },
     methods: {
-      ...mapActions(['fetchMeetups'])
+      ...mapActions('meetups', ['fetchMeetups'])
     }
   }
 </script>

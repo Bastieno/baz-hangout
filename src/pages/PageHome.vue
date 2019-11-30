@@ -43,8 +43,8 @@
     components: { CategoryItem, MeetupItem },
     computed: {
       ...mapState({
-        meetups: state => state.meetups,
-        categories: state => state.categories
+        meetups: state => state.meetups.items,
+        categories: state => state.categories.items
       })
     },
     created() {
@@ -52,7 +52,8 @@
       this.fetchCategories()
     },
     methods: {
-      ...mapActions(['fetchMeetups', 'fetchCategories'])
+      ...mapActions('meetups', ['fetchMeetups']),
+      ...mapActions('categories', ['fetchCategories'])
     }
   }
 </script>
