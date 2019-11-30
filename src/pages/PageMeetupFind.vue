@@ -63,7 +63,7 @@
     },
     computed: {
       meetups() {
-        return this.$store.getters['selectMeetups']
+        return this.$store.state.meetups
       }
     }
   }

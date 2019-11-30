@@ -42,10 +42,10 @@
     components: { CategoryItem, MeetupItem },
     computed: {
       meetups() {
-        return this.$store.getters['selectMeetups']
+        return this.$store.state.meetups
       },
       categories() {
-        return this.$store.getters['selectCategories']
+        return this.$store.state.categories
       }
     },
     created() {

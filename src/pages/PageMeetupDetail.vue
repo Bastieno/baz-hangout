@@ -148,10 +148,10 @@
         return this.meetup.meetupCreator || {}
       },
       meetup() {
-        return this.$store.getters['selectMeetup']
+        return this.$store.state.meetup
       },
       threads() {
-        return this.$store.getters['selectThreads']
+        return this.$store.state.threads
       }
     }
   }

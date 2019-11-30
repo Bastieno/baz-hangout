@@ -12,25 +12,13 @@ export default new Vuex.Store({
     meetup: {}
   },
   getters: {
-    selectMeetups(state) {
-      return state.meetups
-    },
-    selectCategories(state) {
-      return state.categories
-    },
-    selectThreads(state) {
-      return state.threads
-    },
-    selectMeetup(state) {
-      return state.meetup
-    }
   },
   actions: {
     fetchMeetups({state, commit}) {
       axios.get('/api/v1/meetups')
         .then(response => {
           const meetups = response.data
-          commit('setMeetups', meetups)
+          commit('setData', {resource: 'meetups', data: meetups})
           return state.meetups
         })
         .catch(error => console.log(error))
@@ -39,7 +27,7 @@ export default new Vuex.Store({
       axios.get('/api/v1/categories')
         .then(response => {
           const categories = response.data
-          commit('setCategories', categories)
+          commit('setData', { resource: 'categories', data: categories })
           return state.categories
         })
         .catch(error => console.log(error))
@@ -48,7 +36,7 @@ export default new Vuex.Store({
       axios.get(`/api/v1/meetups/${meetupId}`)
         .then(response => {
           const meetup = response.data
-          commit('setMeetup', meetup)
+          commit('setData', { resource: 'meetup', data: meetup })
           return state.meetup
         })
     },
@@ -56,23 +44,14 @@ export default new Vuex.Store({
       axios.get(`/api/v1/threads?meetupId=${meetupId}`)
         .then(response => {
           const threads = response.data
-          commit('setThreads', threads)
+          commit('setData', { resource: 'threads', data: threads })
           return state.threads
         })
     }
   },
   mutations: {
-    setMeetups(state, meetups) {
-      state.meetups = meetups
-    },
-    setCategories(state, categories) {
-      state.categories = categories
-    },
-    setThreads(state, threads) {
-      state.threads = threads
-    },
-    setMeetup(state, meetup) {
-      state.meetup = meetup
+    setData(state, {resource, data}) {
+      state[resource] = data
     }
   }
 })
