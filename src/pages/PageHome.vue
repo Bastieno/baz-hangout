@@ -7,7 +7,7 @@
         <h1 class="title is-inline">Featured Hangouts in "Location"</h1>
         <AppDropdown />
         <button class="button is-primary is-pulled-right m-r-sm">Create Hangouts</button>
-        <button class="button is-primary is-pulled-right m-r-sm">All</button>
+        <router-link :to="'/find'" class="button is-primary is-pulled-right m-r-sm">All</router-link>
       </div>
       <div class="row columns is-multiline is-mobile">
         <MeetupItem
