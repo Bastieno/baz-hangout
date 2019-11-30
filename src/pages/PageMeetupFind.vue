@@ -24,7 +24,7 @@
         </div>
       </div>
     </div>
-    <div class="container">
+    <div v-if='isDataLoaded' class="container">
       <section class="section page-find">
         <div class="columns cover is-multiline">
           <div v-for="meetup of meetups" :key="meetup._id" class="column is-one-third" :style="{'min-height': '160px'}">
@@ -52,14 +52,27 @@
         </div>
       </section>
     </div>
+    <div v-else class="container">
+      <AppSpinner />
+    </div>
   </div>
 </template>
 
 <script>
   import { mapState, mapActions } from 'vuex'
   export default {
+    data() {
+      return {
+        isDataLoaded: false
+      }
+    },
     created () {
       this.fetchMeetups()
+        .then(() => this.isDataLoaded = true)
+        .catch(error => {
+          console.error(error)
+          this.isDataLoaded = true
+        })
     },
     computed: {
       ...mapState({

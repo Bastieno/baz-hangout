@@ -8,20 +8,20 @@ export default {
   },
   actions: {
     fetchMeetups({ state, commit }) {
-      axios.get('/api/v1/meetups')
+      return axios.get('/api/v1/meetups')
         .then(response => {
           const meetups = response.data
           commit('setData', { resource: 'items', data: meetups })
-          return state.meetups
+          return state.items
         })
         .catch(error => console.log(error))
     },
     fetchMeetup({ state, commit }, meetupId) {
-      axios.get(`/api/v1/meetups/${meetupId}`)
+      return axios.get(`/api/v1/meetups/${meetupId}`)
         .then(response => {
           const meetup = response.data
           commit('setData', { resource: 'item', data: meetup })
-          return state.meetup
+          return state.item
         })
     }
   },

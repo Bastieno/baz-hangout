@@ -1,7 +1,7 @@
 <template>
   <div>
     <AppHero />
-    <div class="container">
+    <div v-if="isDataLoaded" class="container">
       <section class="section">
       <div class="m-b-lg">
         <h1 class="title is-inline">Featured Hangouts in "Location"</h1>
@@ -30,6 +30,9 @@
         </div>
       </section>
     </div>
+    <div v-else class="container">
+      <AppSpinner />
+    </div>
   </div>
 </template>
 
@@ -41,6 +44,11 @@
 
   export default {
     components: { CategoryItem, MeetupItem },
+    data() {
+      return {
+        isDataLoaded: false
+      }
+    },
     computed: {
       ...mapState({
         meetups: state => state.meetups.items,
@@ -48,8 +56,15 @@
       })
     },
     created() {
-      this.fetchMeetups()
-      this.fetchCategories()
+      Promise.all([this.fetchMeetups(), this.fetchCategories()])
+        .then(results => {
+          console.log({results})
+          this.isDataLoaded = true
+        })
+        .catch(error => {
+          console.error(error)
+          this.isDataLoaded = true
+        })
     },
     methods: {
       ...mapActions('meetups', ['fetchMeetups']),

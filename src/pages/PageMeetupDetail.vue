@@ -2,7 +2,7 @@
   <div class="meetup-detail-page">
     <section class="hero">
       <div class="hero-body">
-        <div class="container">
+        <div v-if="isDataLoaded" class="container">
           <h2 class="subtitle">
             {{meetup.startDate | formatDate}}
           </h2>
@@ -24,14 +24,14 @@
             </div>
           </article>
         </div>
-        <div class="is-pulled-right">
+        <div v-if="isDataLoaded" class="is-pulled-right">
           <!-- We will handle this later (: -->
           <button class="button is-danger">Leave Group</button>
         </div>
       </div>
     </section>
     <section class="section">
-      <div class="container">
+      <div  v-if="isDataLoaded" class="container">
         <div class="columns">
           <div class="column is-3">
             <aside class="is-medium menu">
@@ -131,6 +131,9 @@
           </div>
         </div>
       </div>
+      <div v-else class="container">
+        <AppSpinner />
+      </div>
     </section>
   </div>
 </template>
@@ -139,11 +142,20 @@
   import { mapActions, mapState } from 'vuex'
 
   export default {
+    data() {
+      return {
+        isDataLoaded: false
+      }
+    },
     created () {
       const meetupId = this.$route.params.id
 
-      this.fetchMeetup(meetupId)
-      this.fetchThreads(meetupId)
+      Promise.all([this.fetchMeetup(meetupId), this.fetchThreads(meetupId)])
+        .then(() => this.isDataLoaded = true)
+        .catch(error => {
+          console.error(error)
+          this.isDataLoaded = true
+        })
     },
     computed: {
       meetupCreator () {
@@ -191,6 +203,7 @@
       background-size: cover;
       background-repeat: no-repeat;
       background-attachment: fixed;
+      min-height: 40vh;
 
         > p,h1,h2, strong {
           color: white;
