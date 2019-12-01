@@ -59,6 +59,7 @@
                          autocomplete="">
                   <div v-if="$v.form.avatar.$error" class="form-error">
                     <span v-if="!$v.form.avatar.url" class="help is-danger">Url format is invalid</span>
+                    <span v-if="!$v.form.avatar.supportedFileType" class="help is-danger">File extension not supported</span>
                   </div>
                 </div>
               </div>
@@ -109,6 +110,7 @@
 <script>
   import { mapActions } from 'vuex'
   import { required, email, minLength, sameAs, url } from 'vuelidate/lib/validators'
+  import { supportedFileType } from '../helpers/validators'
 
   export default {
     data() {
@@ -150,7 +152,8 @@
           email
         },
         avatar: {
-          url
+          url,
+          supportedFileType
         },
         password: {
           required,
