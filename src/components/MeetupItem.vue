@@ -42,11 +42,6 @@ export default {
       type: Object,
       required: true
     }
-  },
-  data() {
-    return {
-
-    }
   }
 }
 </script>

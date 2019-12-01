@@ -37,7 +37,6 @@
 </template>
 
 <script>
-  // import axios from 'axios'
   import CategoryItem from '../components/CategoryItem'
   import MeetupItem from '../components/MeetupItem'
   import { mapActions, mapState } from 'vuex'
