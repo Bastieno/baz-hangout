@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import vuelidate from 'vuelidate'
 import moment from 'moment'
 import App from './App.vue'
 import AppDropdown from './components/shared/AppDropdown'
@@ -14,6 +15,8 @@ Vue.component('AppHero', AppHero)
 Vue.component('AppDropdown', AppDropdown)
 Vue.component('AppSpinner', AppSpinner)
 
+Vue.use(vuelidate)
+
 Vue.filter('capitalize', (word = '') => `${word.charAt(0).toUpperCase()}${word.slice(1)}`)
 
 Vue.filter('formatDate', (value = '', formatType = 'LL') => moment(value).format(formatType))
@@ -21,5 +24,6 @@ Vue.filter('formatDate', (value = '', formatType = 'LL') => moment(value).format
 new Vue({
   router,
   store,
+  vuelidate,
   render: h => h(App),
 }).$mount('#app')

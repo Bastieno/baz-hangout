@@ -13,23 +13,32 @@
               <div class="field">
                 <div class="control">
                   <input class="input is-large"
+                         @blur="$v.form.email.$touch()"
                          type="email"
                          v-model="form.email"
                          placeholder="Your Email"
                          autofocus=""
                          autocomplete="email">
+                  <div v-if="$v.form.email.$error" class="form-error">
+                    <span v-if="!$v.form.email.required" class="help is-danger">Email is required</span>
+                    <span v-if="!$v.form.email.email" class="help is-danger">Email is invalid</span>
+                  </div>
                 </div>
               </div>
               <div class="field">
                 <div class="control">
                   <input class="input is-large"
+                         @blur="$v.form.email.$touch()"
                          type="password"
                          v-model="form.password"
                          placeholder="Your Password"
                          autocomplete="current-password">
+                  <div v-if="$v.form.password.$error" class="form-error">
+                    <span v-if="!$v.form.password.required" class="help is-danger">Password is required</span>
+                  </div>
                 </div>
               </div>
-              <button @click.prevent="login" class="button is-block is-info is-large is-fullwidth">Login</button>
+              <button :disabled="isFormInvalid" @click.prevent="login" class="button is-block is-info is-large is-fullwidth">Login</button>
             </form>
           </div>
           <p class="has-text-grey">
@@ -45,6 +54,7 @@
 
 <script>
 import { mapActions } from 'vuex'
+import { required , email } from 'vuelidate/lib/validators'
 
   export default {
     data() {
@@ -55,9 +65,26 @@ import { mapActions } from 'vuex'
         }
       }
     },
+    validations:{
+      form: {
+        email: {
+          required,
+          email
+        },
+        password: {
+          required
+        }
+      }
+    },
+    computed: {
+      isFormInvalid() {
+        return this.$v.form.$invalid
+      }
+    },
     methods: {
       ...mapActions('auth', ['loginWithEmailAndPassword']),
       login() {
+        this.$v.form.$touch()
         this.loginWithEmailAndPassword(this.form)
       }
     }
