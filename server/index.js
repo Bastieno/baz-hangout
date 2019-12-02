@@ -3,11 +3,24 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const config = require('./config/dev');
 
-require("./models/meetups");
-require("./models/users");
-require("./models/threads");
-require("./models/posts");
-require("./models/categories");
+const session = require('express-session')
+const passport = require('passport')
+const MongodbStore = require('connect-mongodb-session')(session)
+
+require('./models/meetups');
+require('./models/users');
+require('./models/threads');
+require('./models/posts');
+require('./models/categories');
+
+require('./services/passport')
+
+const store = new MongodbStore({
+  uri: config.DB_URI,
+  collection: 'userSessions'
+});
+
+store.on('error', error => console.log(error))
 
 const meetupsRoutes = require('./routes/meetups'),
       usersRoutes = require('./routes/users'),
@@ -23,6 +36,16 @@ mongoose.connect(config.DB_URI, { useUnifiedTopology: true, useNewUrlParser: tru
 const app = express();
 
 app.use(bodyParser.json());
+app.use(session({
+  secret: config.SESSION_SECRET,
+  cookie: { maxAge: 3600000 },
+  resave: false,
+  saveUninitialized: false,
+  store
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/api/v1/meetups', meetupsRoutes);
 app.use('/api/v1/users', usersRoutes);
