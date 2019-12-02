@@ -64,7 +64,7 @@ exports.login = function(req, res, next) {
     if (passportUser) {
       req.login(passportUser, (err) => {
         if (err) return next(err)
-        return res.status(200).json({ user: passportUser })
+        return res.status(200).send(passportUser)
       })
     } else {
       return res.status(422).json({ errors: 'Something went wrong!!!'})
