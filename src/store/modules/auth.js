@@ -2,15 +2,23 @@ import axios from 'axios'
 export default {
   namespaced: true,
   state: {
-    loginData: {},
-    registerData: {}
+    user: {},
   },
   actions: {
-    loginWithEmailAndPassword(context, formData) {
-      console.log(formData)
+    loginWithEmailAndPassword(context, userData) {
+      return axios.post('/api/v1/users/login', userData)
+        .then(res => {
+          const user = res.data
+          context.commit('setAuthUser', user)
+        })
     },
     registerUser(context, userData) {
       return axios.post('/api/v1/users/register', userData)
+    }
+  },
+  mutations: {
+    setAuthUser(state, user) {
+      state.user = user
     }
   }
 }

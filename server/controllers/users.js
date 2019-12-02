@@ -19,14 +19,10 @@ exports.register = async function(req, res) {
 
   const isUsernameTaken = async (username) => {
     const userArr = await User.find({username})
-    console.log('userArr.length', userArr.length)
-    console.log('userArr', userArr)
-
     return userArr.length > 0
   }
 
   const userExists = await isUsernameTaken(username)
-  console.log('userExists', userExists)
 
   if(userExists) return res.status(409).json({ errors: "Username is already taken" })
 
@@ -68,7 +64,7 @@ exports.login = function(req, res, next) {
     if (passportUser) {
       req.login(passportUser, (err) => {
         if (err) return next(err)
-        return res.status(200).json({passportUser})
+        return res.status(200).json({ user: passportUser })
       })
     } else {
       return res.status(422).json({ errors: 'Something went wrong!!!'})

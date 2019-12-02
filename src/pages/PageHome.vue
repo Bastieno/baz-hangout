@@ -56,10 +56,7 @@
     },
     created() {
       Promise.all([this.fetchMeetups(), this.fetchCategories()])
-        .then(results => {
-          console.log({results})
-          this.isDataLoaded = true
-        })
+        .then(() => this.isDataLoaded = true)
         .catch(error => {
           console.error(error)
           this.isDataLoaded = true
