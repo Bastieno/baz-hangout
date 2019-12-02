@@ -6,7 +6,11 @@ import PageMeetupDetail from '../pages/PageMeetupDetail'
 import PageMeetupFind from '../pages/PageMeetupFind'
 import PageLogin from '../pages/PageLogin'
 import PageRegister from '../pages/PageRegister'
+import PageSecret from '../pages/PageSecret'
+import PageNotAuthenticated from '../pages/PageNotAuthenticated'
 import PageNotFound from '../pages/PageNotFound'
+
+import store from '../store/index'
 
 Vue.use(Router)
 
@@ -16,6 +20,12 @@ const router = new Router({
       path: '/',
       name: 'PageHome',
       component: PageHome
+    },
+    {
+      path: '/meetups/secret',
+      name: 'PageSecret',
+      component: PageSecret,
+      meta: { onlyAuthUser: true }
     },
     {
       path: '/meetups/:id',
@@ -30,12 +40,19 @@ const router = new Router({
     {
       path: '/login',
       name: 'PageLogin',
-      component: PageLogin
+      component: PageLogin,
+      meta: { onlyGuestUser: true}
     },
     {
       path: '/register',
       name: 'PageRegister',
-      component: PageRegister
+      component: PageRegister,
+      meta: { onlyGuestUser: true}
+    },
+    {
+      path: '/401',
+      name: 'PageNotAuthenticated',
+      component: PageNotAuthenticated
     },
     {
       path: '*',
@@ -44,6 +61,28 @@ const router = new Router({
     }
   ],
   mode: 'history'
+})
+
+router.beforeEach((to, from, next) => {
+  store.dispatch('auth/getAuthUser')
+    .then( () =>  {
+      const isAuthenticated = store.getters['auth/isAuthenticated']
+      if (to.meta.onlyAuthUser) {
+        if (isAuthenticated) {
+          next()
+        } else {
+          next({ name: 'PageNotAuthenticated' })
+        }
+      } else if (to.meta.onlyGuestUser) {
+        if (isAuthenticated) {
+          next({ name: 'PageHome' })
+        } else {
+          next()
+        }
+      } else {
+        next()
+      }
+    })
 })
 
 export default router
