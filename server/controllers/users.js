@@ -76,3 +76,11 @@ exports.logout = function(req, res) {
   req.logout()
   res.status(200).json({ message: 'Session ended'})
 }
+
+exports.getCurrentUser = function(req, res, next) {
+  const user = req.user;
+
+  if (!user) return res.status(422);
+
+  return res.json(user)
+}

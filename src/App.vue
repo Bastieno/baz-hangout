@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div v-if="isAuthResolved" id="app">
     <TheNavbar />
     <div class="page-wrapper">
       <router-view />
@@ -17,6 +17,14 @@ export default {
   components: {
     TheNavbar,
     TheFooter
+  },
+  created() {
+    this.$store.dispatch('auth/getAuthUser')
+  },
+  computed: {
+    isAuthResolved() {
+      return this.$store.state.auth.isAuthResolved
+    }
   }
 }
 </script>
