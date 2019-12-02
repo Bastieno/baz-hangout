@@ -75,3 +75,8 @@ exports.login = function(req, res, next) {
     }
   })(req, res, next)
 }
+
+exports.logout = function(req, res) {
+  req.logout()
+  res.status(200).json({ message: 'Session ended'})
+}

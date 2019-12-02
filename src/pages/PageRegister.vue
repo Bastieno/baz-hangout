@@ -174,6 +174,8 @@
           this.submitStatus = 'Pending'
           setTimeout(() => {
             this.registerUser(this.form)
+              .then(() => this.$router.push('/login'))
+              .catch(error => console.log(error))
             this.submitStatus = 'Ok'
           }, 1500)
         }

@@ -1,3 +1,4 @@
+import axios from 'axios'
 export default {
   namespaced: true,
   state: {
@@ -8,8 +9,8 @@ export default {
     loginWithEmailAndPassword(context, formData) {
       console.log(formData)
     },
-    registerUser(context, formData) {
-      console.log(formData)
+    registerUser(context, userData) {
+      return axios.post('/api/v1/users/register', userData)
     }
   }
 }
