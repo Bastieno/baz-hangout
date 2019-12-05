@@ -1,6 +1,7 @@
 import axios from 'axios'
 import jwt from 'jsonwebtoken'
 import axiosInstance from '../../services/axios'
+import { rejectError } from '../../helpers'
 
 const checkTokenValidity = (token) => {
   if (token) {
@@ -33,9 +34,11 @@ export default {
           localStorage.setItem('user-token', user.token)
           context.commit('setAuthUser', user)
         })
+        .catch(error => rejectError(error))
     },
     registerUser(context, userData) {
       return axios.post('/api/v1/users/register', userData)
+      .catch(error => rejectError(error))
     },
     getAuthUser({commit, getters}) {
       const authUser = getters['selectAuthUser']

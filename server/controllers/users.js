@@ -22,9 +22,17 @@ exports.register = async function(req, res) {
     return userArr.length > 0
   }
 
-  const userExists = await isUsernameTaken(username)
+  const isEmailTaken = async (email) => {
+    const userArr = await User.find({ email })
+    return userArr.length > 0
+  }
 
-  if(userExists) return res.status(409).json({ errors: "Username is already taken" })
+  const userExists = await isUsernameTaken(username)
+  const emailTaken = await isEmailTaken(email)
+
+  if (userExists) return res.status(409).json({ errors: { message: 'This username is already taken'}})
+  if (emailTaken) return res.status(409).json({ errors: { message: 'This email is already taken'}})
+
 
   if (!email) return res.status(422).json({
     errors: 'Email is required'

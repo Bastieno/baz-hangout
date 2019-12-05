@@ -87,8 +87,7 @@ import { required , email } from 'vuelidate/lib/validators'
         this.$v.form.$touch()
         this.loginWithEmailAndPassword(this.form)
           .then(() => this.$router.push('/'))
-          .catch(error => {
-            const errorMessage = error.response.data.errors.message
+          .catch(errorMessage => {
             this.$toasted.error(errorMessage, {duration: 5000})
           })
       }

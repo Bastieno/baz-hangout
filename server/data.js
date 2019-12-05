@@ -155,7 +155,7 @@ module.exports = {
       "createdAt": moment().toISOString(),
       "updatedAt": moment().toISOString(),
       "username": "bastieno",
-      "password": "ogochukwu24",
+      "password": "password",
       joinedMeetups: [meetup2Id, meetup3Id, meetup4Id, meetup5Id, meetup6Id]
     },
     {

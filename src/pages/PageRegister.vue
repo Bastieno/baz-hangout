@@ -19,7 +19,7 @@
                          placeholder="Username">
                   <div v-if="$v.form.username.$error" class="form-error">
                     <span class="help is-danger" v-if="!$v.form.username.required">Username is required</span>
-                    <span class="help is-danger" v-if="!$v.form.username.isUnique">This username is already registered</span>
+                    <span class="help is-danger" v-if="!$v.form.username.minLength">Username must have at least {{$v.form.username.$params.minLength.min}} letters.</span>
                   </div>
                 </div>
               </div>
@@ -92,7 +92,7 @@
               </div>
               <button  @click.prevent="register" type="submit" class="button is-block is-info is-large is-fullwidth">Register</button>
               <p class="typo__p is-success" v-if="submitStatus === 'Ok'">Thanks for registering!</p>
-              <p class="typo__p" v-if="submitStatus === 'Error'">Please fill the form correctly.</p>
+              <p class="typo__p" v-if="submitStatus === 'Error' && isFormInvalid">Please fill the form correctly.</p>
               <p class="typo__p" v-if="submitStatus === 'Pending'">Sending...</p>
             </form>
           </div>
@@ -126,22 +126,16 @@
         }
       }
     },
+    computed: {
+      isFormInvalid() {
+        return this.$v.form.$invalid
+      }
+    },
     validations: {
       form: {
         username: {
           required,
-          isUnique(value) {
-            // standalone validator ideally should not assume a field is required
-            if (!value) return true
-
-            // simulate async call, fail for all logins with even length
-            return new Promise((resolve, reject) => {
-              setTimeout(() => {
-                resolve(typeof value === 'string' && value.length % 2 !== 0)
-                reject('An error occured')
-              }, 350 + Math.random() * 300)
-            })
-        }
+          minLength: minLength(3),
         },
         name: {
           required,
@@ -174,9 +168,16 @@
           this.submitStatus = 'Pending'
           setTimeout(() => {
             this.registerUser(this.form)
-              .then(() => this.$router.push('/login'))
-              .catch(error => console.log(error))
-            this.submitStatus = 'Ok'
+              .then(() => {
+                this.$toasted.success('Thanks for registering', {duration: 6000})
+                this.$router.push('/login')
+                this.$toasted.success('Please login to continue', {duration: 15000})
+                this.submitStatus = 'Ok'
+              })
+              .catch(errorMessage => {
+                this.$toasted.error(errorMessage, {duration: 5000})
+                this.submitStatus = 'Error'
+              })
           }, 1500)
         }
       },
