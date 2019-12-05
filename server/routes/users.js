@@ -5,7 +5,7 @@ const UsersCtrl = require('../controllers/users');
 const AuthCtrl = require('../controllers/auth')
 
 router.get('', UsersCtrl.getUsers);
-router.get('/me', AuthCtrl.isOnlyAuthUsers, UsersCtrl.getCurrentUser);
+router.get('/me', AuthCtrl.onlyAuthUsers, UsersCtrl.getCurrentUser);
 router.post('/register', UsersCtrl.register);
 router.post('/login', UsersCtrl.login)
 router.post('/logout', UsersCtrl.logout)

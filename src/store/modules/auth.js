@@ -1,4 +1,15 @@
 import axios from 'axios'
+import jwt from 'jsonwebtoken'
+
+const checkTokenValidity = (token) => {
+  if (token) {
+    const decodedToken = jwt.decode(token)
+
+    return decodedToken && (decodedToken.exp * 1000) > new Date().getTime()
+  }
+  return false
+}
+
 export default {
   namespaced: true,
   state: {
@@ -18,6 +29,7 @@ export default {
       return axios.post('/api/v1/users/login', userData)
         .then(res => {
           const user = res.data
+          localStorage.setItem('user-token', user.token)
           context.commit('setAuthUser', user)
         })
     },
@@ -26,18 +38,22 @@ export default {
     },
     getAuthUser({commit, getters}) {
       const authUser = getters['selectAuthUser']
+      const token = localStorage.getItem('user-token')
+      const isTokenValid = checkTokenValidity(token)
 
-      if (authUser) return new Promise.resolve(authUser)
+      if (authUser && isTokenValid) return Promise.resolve(authUser)
 
       const config = {
         headers: {
-          'Cache-Control': 'no-cache'
+          'Cache-Control': 'no-cache',
+          'authorization': `Bearer ${token}`
         }
       }
 
       return axios.get('/api/v1/users/me', config)
         .then(res => {
           const user = res.data
+          localStorage.setItem('user-token', user.token)
           commit('setAuthUser', user)
           commit('setAuthState', true)
           return user

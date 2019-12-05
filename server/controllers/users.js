@@ -9,7 +9,7 @@ exports.getUsers = function(req, res) {
       return res.status(422).send({errors});
     }
 
-    return res.json(users);
+    return res.json(users.toAuthJSON());
   });
 }
 
@@ -62,10 +62,12 @@ exports.login = function(req, res, next) {
     if (err) return next(err)
 
     if (passportUser) {
-      req.login(passportUser, (err) => {
-        if (err) return next(err)
-        return res.status(200).send(passportUser)
-      })
+      // Only for Session Auth
+      // req.login(passportUser, (err) => {
+      //   if (err) return next(err)
+      //   return res.status(200).send(passportUser)
+      // })
+      return res.json(passportUser.toAuthJSON())
     } else {
       return res.status(422).json({ errors: 'Something went wrong!!!'})
     }
