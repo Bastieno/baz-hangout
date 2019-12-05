@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import vuelidate from 'vuelidate'
+import Toasted from 'vue-toasted';
 import moment from 'moment'
 import App from './App.vue'
 import AppDropdown from './components/shared/AppDropdown'
@@ -16,6 +17,7 @@ Vue.component('AppDropdown', AppDropdown)
 Vue.component('AppSpinner', AppSpinner)
 
 Vue.use(vuelidate)
+Vue.use(Toasted)
 
 Vue.filter('capitalize', (word = '') => `${word.charAt(0).toUpperCase()}${word.slice(1)}`)
 

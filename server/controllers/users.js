@@ -69,7 +69,7 @@ exports.login = function(req, res, next) {
       // })
       return res.json(passportUser.toAuthJSON())
     } else {
-      return res.status(422).json({ errors: 'Something went wrong!!!'})
+      return res.status(422).json({ errors: { message: 'Invalid email or password'}})
     }
   })(req, res, next)
 }
