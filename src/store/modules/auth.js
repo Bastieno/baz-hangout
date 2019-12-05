@@ -1,6 +1,6 @@
 import axios from 'axios'
 import jwt from 'jsonwebtoken'
-import { axiosInstance } from '../../services/axios'
+import axiosInstance from '../../services/axios'
 
 const checkTokenValidity = (token) => {
   if (token) {
@@ -58,10 +58,15 @@ export default {
           commit('setAuthState', true)
         })
     },
-    logout(context) {
-      return axios.post('/api/v1/users/logout')
-        .then(() => context.commit('setAuthUser', null))
-        .catch(err => console.log(err))
+    logout({commit}) {
+      // return axios.post('/api/v1/users/logout')
+      //   .then(() => context.commit('setAuthUser', null))
+      //   .catch(err => console.log(err))
+      return new Promise(resolve => {
+        localStorage.removeItem('user-token')
+        commit('setAuthUser', null)
+        resolve(true)
+      })
     }
   },
   mutations: {

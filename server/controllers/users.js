@@ -9,7 +9,7 @@ exports.getUsers = function(req, res) {
       return res.status(422).send({errors});
     }
 
-    return res.json(users.toAuthJSON());
+    return res.json(users);
   });
 }
 
@@ -84,5 +84,5 @@ exports.getCurrentUser = function(req, res, next) {
 
   if (!user) return res.status(422);
 
-  return res.json(user)
+  return res.json(user.toAuthJSON())
 }

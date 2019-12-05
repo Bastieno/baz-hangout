@@ -1,11 +1,18 @@
 import axios from 'axios'
 
-const token = localStorage.getItem('user-token') || ''
-
-export const axiosInstance = axios.create({
+const axiosInstance = axios.create({
   headers: {
-    authorization: `Bearer ${token}`,
-    'Cache- Control': 'no - cache',
+    'Cache-Control': 'no-cache',
   },
   timeout: 3000
 })
+
+axiosInstance.interceptors.request.use((config) => {
+  const token = localStorage.getItem('user-token') || ''
+
+  if (token) config.headers.Authorization = `Bearer ${token}`
+
+  return config
+}, err => Promise.reject(err))
+
+export default axiosInstance
