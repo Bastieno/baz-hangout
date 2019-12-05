@@ -1,5 +1,6 @@
 import axios from 'axios'
 import jwt from 'jsonwebtoken'
+import { axiosInstance } from '../../services/axios'
 
 const checkTokenValidity = (token) => {
   if (token) {
@@ -43,14 +44,7 @@ export default {
 
       if (authUser && isTokenValid) return Promise.resolve(authUser)
 
-      const config = {
-        headers: {
-          'Cache-Control': 'no-cache',
-          'authorization': `Bearer ${token}`
-        }
-      }
-
-      return axios.get('/api/v1/users/me', config)
+      return axiosInstance.get('/api/v1/users/me')
         .then(res => {
           const user = res.data
           localStorage.setItem('user-token', user.token)
