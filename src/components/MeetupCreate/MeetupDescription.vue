@@ -3,16 +3,18 @@
     <div class="field">
       <label class="title">Image</label>
       <input v-model="form.image"
+             @blur="$v.form.image.$touch()"
              class="input"
              type="text"
              placeholder="Image URL">
       <div v-if="$v.form.image.$error">
-        <span v-if="!$v.form.image.required" class="help is-danger">Username is required</span>
+        <span v-if="!$v.form.image.required" class="help is-danger">Image link is required</span>
       </div>
     </div>
     <div class="field">
       <label class="title">Additional Info</label>
       <textarea v-model="form.shortInfo"
+                @blur="$v.form.shortInfo.$touch()"
                 class="textarea"
                 placeholder="Write Short Info"
                 rows="3"></textarea>
@@ -23,6 +25,7 @@
     <div class="field">
       <label class="title">Long Description</label>
       <textarea v-model="form.description"
+                @blur="$v.form.description.$touch()"
                 class="textarea"
                 placeholder="Write description"
                 rows="10"></textarea>
