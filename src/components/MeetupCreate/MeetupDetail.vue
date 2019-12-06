@@ -12,12 +12,14 @@
       </div>
     </div>
     <div class="field">
-      <label class="title m-b-sm">Starts At</label>
-      <input v-model="form.startDate"
-             @blur="$v.form.startDate.$touch()"
-             class="input"
-             type="text"
-             placeholder="Starts At">
+      <label class="title m-b-sm">Start Date</label>
+      <datepicker
+        :input-class="'input'"
+        @input="setDate"
+        :disabledDates="disabledDates"
+        :placeholder="new Date | formatDate "
+      >
+      </datepicker>
       <div v-if="$v.form.startDate.$error">
         <span v-if="!$v.form.startDate.required" class="help is-danger">Starts at is required</span>
       </div>
@@ -60,9 +62,22 @@
 
 <script>
   import { required } from 'vuelidate/lib/validators'
+  import Datepicker from 'vuejs-datepicker'
+  import moment from 'moment'
+
   export default {
+    components: {
+      Datepicker
+    },
     data () {
       return {
+        disabledDates: {
+          customPredictor: function(date) {
+            const today = new Date()
+            const yesterday = today.setDate(today.getDate() - 1)
+            return date < yesterday
+          }
+        },
         form: {
           title: null,
           startDate: null,
@@ -92,6 +107,10 @@
     methods: {
       emitFormData() {
         this.$emit('updateData', { data: this.form, isValid: !this.$v.$invalid})
+      },
+      setDate(date) {
+        this.form.startDate = moment(date).format()
+        this.emitFormData()
       }
     }
   }
