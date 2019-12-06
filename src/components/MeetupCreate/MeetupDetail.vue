@@ -17,7 +17,7 @@
         :input-class="'input'"
         @input="setDate"
         :disabledDates="disabledDates"
-        :placeholder="new Date | formatDate "
+        :placeholder="new Date() | formatDate "
       >
       </datepicker>
       <div v-if="$v.form.startDate.$error">
@@ -26,19 +26,11 @@
     </div>
     <div class="field">
       <label class="title m-b-sm">From</label>
-      <input v-model="form.timeFrom"
-             @blur="$v.form.timeFrom.$touch()"
-             class="input"
-             type="text"
-             placeholder="Time From">
+      <vue-timepicker :minute-interval="10" @change="changeTime($event, 'timeFrom')"></vue-timepicker>
     </div>
     <div class="field">
       <label class="title m-b-sm">To</label>
-      <input v-model="form.timeTo"
-             @blur="$v.form.timeTo.$touch()"
-             class="input"
-             type="text"
-             placeholder="Time to">
+      <vue-timepicker :minute-interval="10" @change="changeTime($event, 'timeTo')"></vue-timepicker>
     </div>
     <div class="field">
       <label class="title m-b-sm">Please Choose the Category.</label>
@@ -63,11 +55,13 @@
 <script>
   import { required } from 'vuelidate/lib/validators'
   import Datepicker from 'vuejs-datepicker'
+  import VueTimepicker from 'vue2-timepicker/src'
   import moment from 'moment'
 
   export default {
     components: {
-      Datepicker
+      Datepicker,
+      VueTimepicker
     },
     data () {
       return {
@@ -110,6 +104,12 @@
       },
       setDate(date) {
         this.form.startDate = moment(date).format()
+        this.emitFormData()
+      },
+      changeTime({data}, field) {
+        const hour = data.HH || '00'
+        const minutes = data.mm || '00'
+        this.form[field] = `${hour}:${minutes}`
         this.emitFormData()
       }
     }
