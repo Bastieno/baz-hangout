@@ -4,7 +4,7 @@ const axiosInstance = axios.create({
   headers: {
     'Cache-Control': 'no-cache',
   },
-  timeout: 3000
+  timeout: 5000
 })
 
 axiosInstance.interceptors.request.use((config) => {

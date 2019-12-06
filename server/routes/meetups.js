@@ -8,4 +8,6 @@ router.get('', MeetupsCtrl.getMeetups);
 router.get('/secret', AuthCtrl.onlyAuthUsers, MeetupsCtrl.getSecret)
 router.get('/:id', MeetupsCtrl.getMeetupById);
 
+router.post('', AuthCtrl.onlyAuthUsers, MeetupsCtrl.createMeetup);
+
 module.exports = router;

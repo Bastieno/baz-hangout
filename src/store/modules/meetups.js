@@ -1,4 +1,5 @@
 import axios from 'axios'
+import axiosInstance  from '../../services/axios'
 
 export default {
   namespaced: true,
@@ -24,9 +25,14 @@ export default {
           return state.item
         })
     },
-    createMeetup(context, meetupData) {
+    createMeetup({rootState}, meetupData) {
       // Make a request to api
-      console.log(meetupData)
+      const { user } = rootState.auth
+      meetupData.meetupCreator = user
+      meetupData.processedLocation = meetupData.location.toLowerCase().replace(/[\s,]+/g, '').trim()
+
+      return axiosInstance.post('/api/v1/meetups', meetupData)
+        .then((res) => res.data)
     }
   },
   mutations: {
