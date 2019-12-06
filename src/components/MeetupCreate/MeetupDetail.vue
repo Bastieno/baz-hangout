@@ -91,7 +91,7 @@
     },
     methods: {
       emitFormData() {
-        this.$emit('updateData', this.form)
+        this.$emit('updateData', { data: this.form, isValid: !this.$v.$invalid})
       }
     }
   }
