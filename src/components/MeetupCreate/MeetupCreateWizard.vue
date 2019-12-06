@@ -24,10 +24,8 @@
       >
         Next
       </button>
-      <button v-else class="button is-primary">Confirm</button>
+      <button @click="handleConfirm" v-else class="button is-primary">Confirm</button>
     </div>
-    <!-- Just To See Data in the Form -->
-    <pre><code>{{form}}</code></pre>
   </div>
 </template>
 
@@ -76,6 +74,9 @@
       moveToPreviousStep() {
         this.currentStep -= 1
         this.canProceed = true
+      },
+      handleConfirm() {
+        this.$emit('meetupConfirmed', this.form)
       }
     },
     computed: {

@@ -23,6 +23,10 @@ export default {
           commit('setData', { resource: 'item', data: meetup })
           return state.item
         })
+    },
+    createMeetup(context, meetupData) {
+      // Make a request to api
+      console.log(meetupData)
     }
   },
   mutations: {

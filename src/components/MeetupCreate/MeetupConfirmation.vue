@@ -19,7 +19,7 @@
         <span class="result-title">
         Start Date
         </span>
-        <p>{{form.startDate}}</p>
+        <p>{{form.startDate | formatDate}}</p>
       </div>
       <div>
         <span class="result-title">
