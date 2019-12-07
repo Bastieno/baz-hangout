@@ -79,9 +79,9 @@
           </div>
           <div class="column is-7 is-offset-1">
             <div class="content is-medium">
-              <h3 class="title is-3">About the Meetup</h3>
+              <h3 class="title is-3">About the Hangout</h3>
               <p>{{meetup.description}}</p>
-              <button v-if="canJoin" class="button is-primary">Join In</button>
+              <button @click="joinMeetup" v-if="canJoin" class="button is-primary">Join In</button>
               <button
                 v-if="!isAuthenticated"
                 :disabled="true"
@@ -186,8 +186,11 @@
     },
     methods: {
       ...mapActions('meetups', ['fetchMeetup']),
-      ...mapActions('threads', ['fetchThreads'])
-
+      ...mapActions('threads', ['fetchThreads']),
+      joinMeetup() {
+        this.$store.dispatch('meetups/joinMeetup', this.meetup._id)
+          .then(() => this.$toasted.success('Thanks for joining this hangout', {duration: 5000}) )
+      }
     }
   }
 </script>

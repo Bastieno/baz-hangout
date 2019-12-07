@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import axios from 'axios'
 import jwt from 'jsonwebtoken'
 import axiosInstance from '../../services/axios'
@@ -45,10 +46,12 @@ export default {
         })
         .catch(error => rejectError(error))
     },
+
     registerUser(context, userData) {
       return axios.post('/api/v1/users/register', userData)
       .catch(error => rejectError(error))
     },
+
     getAuthUser({commit, getters}) {
       const authUser = getters['selectAuthUser']
       const token = localStorage.getItem('user-token')
@@ -70,10 +73,13 @@ export default {
           commit('setAuthState', true)
         })
     },
+
+    addMeetupToAuthUser({commit, state}, meetupId) {
+      const userMeetups = [ ...state.user['joinedMeetups'], meetupId ]
+      commit('setMeetupsToAuthUser', userMeetups)
+    },
+
     logout({commit}) {
-      // return axios.post('/api/v1/users/logout')
-      //   .then(() => context.commit('setAuthUser', null))
-      //   .catch(err => console.log(err))
       return new Promise(resolve => {
         localStorage.removeItem('user-token')
         commit('setAuthUser', null)
@@ -87,6 +93,11 @@ export default {
     },
     setAuthState(state, authState) {
       state.isAuthResolved = authState
+    },
+    setMeetupsToAuthUser(state, meetups) {
+      Vue.set(state.user, 'joinedMeetups', meetups)
+      const user = state.user
+      console.log('user', user)
     }
   }
 }

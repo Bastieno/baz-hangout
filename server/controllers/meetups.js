@@ -1,4 +1,5 @@
 const Meetup = require('../models/meetups');
+const User = require('../models/users');
 
 exports.getSecret = function(req, res) {
   return res.json({ message: 'I am a secret route'})
@@ -48,4 +49,40 @@ exports.createMeetup = function(req, res) {
 
     return res.json(createdMeetup)
   })
+}
+
+exports.joinMeetup = function(req, res) {
+  const { user } = req;
+  console.log('user', user);
+  const { id } = req.params;
+
+  Meetup.findById(id, (errors, meetup) => {
+    if(errors) return res.status(422).send({ errors })
+
+    meetup.joinedPeople.push(user);
+    meetup.joinedPeopleCount += 1;
+
+    return Promise.all(
+      [
+        meetup.save(),
+        User.updateOne({ _id: user.id}, { $push: { joinedMeetups: meetup }})
+      ]
+    )
+    .then(() => res.json({id}))
+    .catch(errors => res.status(422).send({errors}))
+  })
+}
+
+exports.leaveMeetup = function(req, res) {
+  const { user } = req;
+  const { id } = req.params;
+
+  return Promise.all(
+    [
+      Meetup.updateOne({ _id: id }, { $pull: { joinedPeople: user.id }, $inc: { joinedPeopleCount: -1 }}),
+      User.updateOne({ _id: user.id }, { $pull: { joinedMeetups: id }})
+    ]
+  )
+  .then(() => res.json({id}))
+  .catch(errors => res.status(422).send({errors}))
 }

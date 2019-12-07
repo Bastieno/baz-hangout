@@ -9,5 +9,7 @@ router.get('/secret', AuthCtrl.onlyAuthUsers, MeetupsCtrl.getSecret)
 router.get('/:id', MeetupsCtrl.getMeetupById);
 
 router.post('', AuthCtrl.onlyAuthUsers, MeetupsCtrl.createMeetup);
+router.post('/:id/join', AuthCtrl.onlyAuthUsers, MeetupsCtrl.joinMeetup);
+router.post('/:id/leave', AuthCtrl.onlyAuthUsers, MeetupsCtrl.leaveMeetup);
 
 module.exports = router;
