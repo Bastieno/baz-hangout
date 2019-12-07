@@ -79,6 +79,12 @@ export default {
       commit('setMeetupsToAuthUser', userMeetups)
     },
 
+    removeMeetupFromAuthUser({commit, state}, meetupId) {
+      const userMeetupsIds = state.user['joinedMeetups']
+      const newUserMeetupsIds = userMeetupsIds.filter(id => id !== meetupId)
+      commit('setMeetupsToAuthUser', newUserMeetupsIds)
+    },
+
     logout({commit}) {
       return new Promise(resolve => {
         localStorage.removeItem('user-token')
@@ -96,8 +102,6 @@ export default {
     },
     setMeetupsToAuthUser(state, meetups) {
       Vue.set(state.user, 'joinedMeetups', meetups)
-      const user = state.user
-      console.log('user', user)
     }
   }
 }

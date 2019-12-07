@@ -53,7 +53,6 @@ exports.createMeetup = function(req, res) {
 
 exports.joinMeetup = function(req, res) {
   const { user } = req;
-  console.log('user', user);
   const { id } = req.params;
 
   Meetup.findById(id, (errors, meetup) => {

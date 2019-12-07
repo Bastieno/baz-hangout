@@ -46,6 +46,18 @@ export default {
           commit('addUserToMeetup', [...joinedPeople, user])
           return true
         })
+    },
+    leaveMeetup({state, rootState, commit, dispatch}, meetupId) {
+      const { user } = rootState.auth
+
+      return axiosInstance.post(`/api/v1/meetups/${meetupId}/leave`)
+        .then(() => {
+          dispatch('auth/removeMeetupFromAuthUser', meetupId, {root: true})
+
+          const { joinedPeople } = state.item
+          commit('removeUserFromMeetup', joinedPeople.filter((joinedUser) => joinedUser._id !== user._id))
+          return true
+        })
     }
   },
   mutations: {
@@ -53,6 +65,9 @@ export default {
       state[resource] = data
     },
     addUserToMeetup(state, joinedPeople) {
+      Vue.set(state.item, 'joinedPeople', joinedPeople)
+    },
+    removeUserFromMeetup(state, joinedPeople) {
       Vue.set(state.item, 'joinedPeople', joinedPeople)
     }
   }

@@ -26,7 +26,7 @@
         </div>
         <div v-if="isDataLoaded" class="is-pulled-right">
           <!-- We will handle this later (: -->
-          <button  v-if="isMember" class="button is-danger">Leave Hangout</button>
+          <button @click="leaveMeetup"  v-if="isMember" class="button is-danger">Leave Hangout</button>
         </div>
       </div>
     </section>
@@ -189,7 +189,13 @@
       ...mapActions('threads', ['fetchThreads']),
       joinMeetup() {
         this.$store.dispatch('meetups/joinMeetup', this.meetup._id)
-          .then(() => this.$toasted.success('Thanks for joining this hangout', {duration: 5000}) )
+          .then(() => this.$toasted.success('Thanks for joining this hangout', {duration: 5000}))
+          .catch(() => this.$toasted.error('This operation failed. Please try again', {duration: 5000}))
+      },
+      leaveMeetup() {
+        this.$store.dispatch('meetups/leaveMeetup', this.meetup._id)
+          .then(() => this.$toasted.success('You just left this hangout', {duration: 5000}))
+          .catch(() => this.$toasted.error('This operation failed. Please try again', {duration: 5000}))
       }
     }
   }
