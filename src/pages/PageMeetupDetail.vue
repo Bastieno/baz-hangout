@@ -89,6 +89,12 @@
               >
                 You need to log in in order to join
               </button>
+              <ThreadCreateModal
+                @handleThreadCreate='createNewThread'
+                v-if="isMember || isMeetupOwner"
+                :btnText="`Welcome ${authUser.username}. Start a thread`"
+                :title="'Create Thread'"
+              />
             </div>
             <!-- Thread List START -->
             <div class="content is-medium">
@@ -143,8 +149,12 @@
 
 <script>
   import { mapActions, mapState } from 'vuex'
+  import ThreadCreateModal from '../components/ThreadCreateModal'
 
   export default {
+    components: {
+      ThreadCreateModal
+    },
     data() {
       return {
         isDataLoaded: false
@@ -166,7 +176,8 @@
       },
       ...mapState({
         meetup: state => state.meetups.item,
-        threads: state => state.threads.items
+        threads: state => state.threads.items,
+        authUser: state => state.auth.user
       }),
       isAuthenticated() {
         return this.$store.getters['auth/isAuthenticated']
@@ -186,7 +197,7 @@
     },
     methods: {
       ...mapActions('meetups', ['fetchMeetup']),
-      ...mapActions('threads', ['fetchThreads']),
+      ...mapActions('threads', ['fetchThreads', 'postThread']),
       joinMeetup() {
         this.$store.dispatch('meetups/joinMeetup', this.meetup._id)
           .then(() => this.$toasted.success('Thanks for joining this hangout', {duration: 5000}))
@@ -196,6 +207,10 @@
         this.$store.dispatch('meetups/leaveMeetup', this.meetup._id)
           .then(() => this.$toasted.success('You just left this hangout', {duration: 5000}))
           .catch(() => this.$toasted.error('This operation failed. Please try again', {duration: 5000}))
+      },
+      createNewThread({ title, done }) {
+        this.postThread({title, meetupId: this.meetup._id})
+          .then(() => done())
       }
     }
   }
