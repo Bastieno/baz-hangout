@@ -60,7 +60,7 @@
               <p class="menu-label">
                 Threads
               </p>
-              <ul v-for="thread in threads" :key="thread._id">
+              <ul v-for="thread in orderedThreads" :key="thread._id">
                 <li>{{ thread.title }}</li>
               </ul>
               <p class="menu-label">
@@ -99,7 +99,7 @@
             <!-- Thread List START -->
             <div class="content is-medium">
               <h3 class="title is-3">Threads</h3>
-              <div v-for="thread in threads" :key="thread._id" class="box">
+              <div v-for="thread in orderedThreads" :key="thread._id" class="box">
                 <!-- Thread title -->
                 <h4 id="const" class="title is-3"> {{ thread.title }} </h4>
                 <!-- Create new post, handle later -->
@@ -192,6 +192,10 @@
         return !this.isMeetupOwner &&
                 this.isAuthenticated &&
                 !this.isMember
+      },
+      orderedThreads() {
+        const threads = this.$store.state.threads.items
+        return threads.sort((thread, nextThread) => new Date(nextThread.createdAt) - new Date(thread.createdAt))
       }
 
     },
@@ -210,7 +214,10 @@
       },
       createNewThread({ title, done }) {
         this.postThread({title, meetupId: this.meetup._id})
-          .then(() => done())
+          .then(() => {
+            this.$toasted.success('Thread created successfully', {duration: 3000})
+            done()
+          })
       }
     }
   }
