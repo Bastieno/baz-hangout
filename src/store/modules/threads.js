@@ -28,6 +28,21 @@ export default {
           commit('addThreadToArray', { resource: 'items', index, createdThread })
           return createdThread
         })
+    },
+    sendPost({state, commit}, {text, threadId}) {
+      const post = {
+        text,
+        thread: threadId
+      }
+
+      console.log('post', post)
+
+      console.log('state', state)
+      console.log('commit', commit)
+
+      return axiosInstance.post('/api/v1/posts', post)
+        .then(() => console.log('Post sent'))
+        .catch((err) => console.log(err.message))
     }
   },
   mutations: {

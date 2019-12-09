@@ -1,11 +1,20 @@
 <template>
   <form class="post-create">
     <div class="field">
-      <textarea class="textarea textarea-post"
-                v-auto-expand
-                placeholder="Write a post"
-                rows="1"></textarea>
-      <button :disabled="true" class="button is-primary m-t-sm">Send</button>
+      <textarea
+        class="textarea textarea-post"
+        v-auto-expand
+        v-model="text"
+        placeholder="Write a post"
+        rows="1">
+      </textarea>
+      <button
+        :disabled="!text"
+        class="button is-primary m-t-sm"
+        @click.prevent="sendPost"
+      >
+        Send
+      </button>
     </div>
   </form>
 </template>
@@ -15,6 +24,23 @@ import autoExpand from '../directives/autoExpand'
 export default {
   directives: {
     autoExpand
+  },
+  props: {
+    threadId: {
+      type: String,
+      required: true
+    }
+  },
+  data() {
+    return {
+      text: ''
+    }
+  },
+  methods: {
+    sendPost() {
+      this.$store.dispatch('threads/sendPost', { text: this.text, threadId: this.threadId })
+      console.log(this.threadId, this.text)
+    }
   }
 }
 </script>
