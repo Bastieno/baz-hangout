@@ -132,7 +132,7 @@
           this.isDataLoaded = true
         })
 
-        this.$root.socket.on('meetup/postPublished', (post) => {
+        this.$socket.on('meetup/postPublished', (post) => {
           alert(post.text)
           console.log(post.text)
         })

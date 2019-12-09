@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import io from 'socket.io-client'
 import vuelidate from 'vuelidate'
 import Toasted from 'vue-toasted';
 import moment from 'moment'
@@ -10,6 +9,7 @@ import AppSpinner from './components/shared/AppSpinner'
 
 import router from './router'
 import store from './store'
+import AppSocket from './plugins/socket'
 
 Vue.config.productionTip = false
 
@@ -19,19 +19,13 @@ Vue.component('AppSpinner', AppSpinner)
 
 Vue.use(vuelidate)
 Vue.use(Toasted)
+Vue.use(AppSocket, {connection: 'http://localhost:3001'})
 
 Vue.filter('capitalize', (word = '') => `${word.charAt(0).toUpperCase()}${word.slice(1)}`)
 
 Vue.filter('formatDate', (value = '', formatType = 'LL') => moment(value).format(formatType))
 
-const socket = io('http://localhost:3001')
-
 new Vue({
-  data() {
-    return {
-      socket
-    }
-  },
   router,
   store,
   vuelidate,
