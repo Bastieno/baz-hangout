@@ -25,6 +25,8 @@ Vue.filter('capitalize', (word = '') => `${word.charAt(0).toUpperCase()}${word.s
 
 Vue.filter('formatDate', (value = '', formatType = 'LL') => moment(value).format(formatType))
 
+Vue.filter('fromNow', (value = '') => moment(value).fromNow())
+
 new Vue({
   router,
   store,
