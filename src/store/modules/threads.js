@@ -39,9 +39,10 @@ export default {
         .then((res) => {
           const createdPost = res.data
           const threadIndexToUpdate = state.items.findIndex(thread => thread._id === threadId)
-          const index = state.items[threadIndexToUpdate].posts.length
+          const { posts } = state.items[threadIndexToUpdate]
+          posts.unshift(createdPost)
 
-          commit('updateThreadWithPost', { threadIndexToUpdate, index, createdPost })
+          commit('updateThreadWithPost', { threadIndexToUpdate, posts })
           return createdPost
         })
         .catch((err) => console.log(err.message))
@@ -54,8 +55,8 @@ export default {
     addThreadToArray(state, { resource, index, createdThread }) {
       Vue.set(state[resource], index, createdThread )
     },
-    updateThreadWithPost(state, { threadIndexToUpdate, index, createdPost }) {
-      Vue.set(state.items[threadIndexToUpdate].posts, index, createdPost)
+    updateThreadWithPost(state, { threadIndexToUpdate, posts }) {
+      Vue.set(state.items[threadIndexToUpdate], 'posts', posts)
     }
   }
 }
