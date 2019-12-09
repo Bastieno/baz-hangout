@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import io from 'socket.io-client'
 import vuelidate from 'vuelidate'
 import Toasted from 'vue-toasted';
 import moment from 'moment'
@@ -22,6 +23,8 @@ Vue.use(Toasted)
 Vue.filter('capitalize', (word = '') => `${word.charAt(0).toUpperCase()}${word.slice(1)}`)
 
 Vue.filter('formatDate', (value = '', formatType = 'LL') => moment(value).format(formatType))
+
+io('http://localhost:3001')
 
 new Vue({
   router,
