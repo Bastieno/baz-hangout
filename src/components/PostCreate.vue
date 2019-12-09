@@ -39,7 +39,7 @@ export default {
   methods: {
     sendPost() {
       this.$store.dispatch('threads/sendPost', { text: this.text, threadId: this.threadId })
-      console.log(this.threadId, this.text)
+        .then(() => this.text = '')
     }
   }
 }

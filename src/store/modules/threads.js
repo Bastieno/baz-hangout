@@ -35,13 +35,15 @@ export default {
         thread: threadId
       }
 
-      console.log('post', post)
-
-      console.log('state', state)
-      console.log('commit', commit)
-
       return axiosInstance.post('/api/v1/posts', post)
-        .then(() => console.log('Post sent'))
+        .then((res) => {
+          const createdPost = res.data
+          const threadIndexToUpdate = state.items.findIndex(thread => thread._id === threadId)
+          const index = state.items[threadIndexToUpdate].posts.length
+
+          commit('updateThreadWithPost', { threadIndexToUpdate, index, createdPost })
+          return createdPost
+        })
         .catch((err) => console.log(err.message))
     }
   },
@@ -51,6 +53,9 @@ export default {
     },
     addThreadToArray(state, { resource, index, createdThread }) {
       Vue.set(state[resource], index, createdThread )
+    },
+    updateThreadWithPost(state, { threadIndexToUpdate, index, createdPost }) {
+      Vue.set(state.items[threadIndexToUpdate].posts, index, createdPost)
     }
   }
 }
