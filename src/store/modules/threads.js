@@ -29,7 +29,7 @@ export default {
           return createdThread
         })
     },
-    sendPost({state, commit}, {text, threadId}) {
+    sendPost({dispatch}, {text, threadId}) {
       const post = {
         text,
         thread: threadId
@@ -38,14 +38,18 @@ export default {
       return axiosInstance.post('/api/v1/posts', post)
         .then((res) => {
           const createdPost = res.data
-          const threadIndexToUpdate = state.items.findIndex(thread => thread._id === threadId)
-          const { posts } = state.items[threadIndexToUpdate]
-          posts.unshift(createdPost)
-
-          commit('updateThreadWithPost', { threadIndexToUpdate, posts })
+          dispatch('addPostToThread', {post: createdPost, threadId})
           return createdPost
         })
         .catch((err) => console.log(err.message))
+    },
+    addPostToThread({state, commit}, {post, threadId}) {
+      const threadIndexToUpdate = state.items.findIndex(thread => thread._id === threadId)
+      const { posts } = state.items[threadIndexToUpdate]
+      posts.unshift(post)
+
+      commit('updateThreadWithPost', { threadIndexToUpdate, posts })
+
     }
   },
   mutations: {

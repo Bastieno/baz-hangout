@@ -132,10 +132,14 @@
           this.isDataLoaded = true
         })
 
-        this.$socket.on('meetup/postPublished', (post) => {
-          alert(post.text)
-          console.log(post.text)
-        })
+        if(this.isAuthenticated) {
+          this.$socket.emit('meetup/subscribe', meetupId)
+          this.$socket.on('meetup/postPublished', this.addPostToThreadHandler)
+        }
+    },
+    destroyed() {
+      this.$socket.removeListener('meetup/postPublished', this.addPostToThreadHandler)
+      this.$socket.emit('meetup/unsubscribe', this.meetup._id)
     },
     computed: {
       meetupCreator () {
@@ -171,7 +175,7 @@
     },
     methods: {
       ...mapActions('meetups', ['fetchMeetup']),
-      ...mapActions('threads', ['fetchThreads', 'postThread']),
+      ...mapActions('threads', ['fetchThreads', 'postThread', 'addPostToThread']),
       joinMeetup() {
         this.$store.dispatch('meetups/joinMeetup', this.meetup._id)
           .then(() => this.$toasted.success('Thanks for joining this hangout', {duration: 5000}))
@@ -188,6 +192,9 @@
             this.$toasted.success('Thread created successfully', {duration: 3000})
             done()
           })
+      },
+      addPostToThreadHandler(post) {
+        this.addPostToThread({post, threadId: post.thread})
       }
     }
   }

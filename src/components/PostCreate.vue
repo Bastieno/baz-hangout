@@ -36,11 +36,16 @@ export default {
       text: ''
     }
   },
+  computed: {
+    meetup() {
+      return this.$store.state.meetups.item
+    }
+  },
   methods: {
     sendPost() {
       this.$store.dispatch('threads/sendPost', { text: this.text, threadId: this.threadId })
         .then((createdPost) => {
-          this.$socket.emit('meetup/postSave', createdPost)
+          this.$socket.emit('meetup/postSaved', {...createdPost, meetup: this.meetup._id})
           this.text = ''
         })
     }
