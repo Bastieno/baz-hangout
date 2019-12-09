@@ -131,6 +131,11 @@
           console.error(error)
           this.isDataLoaded = true
         })
+
+        this.$root.socket.on('meetup/postPublished', (post) => {
+          alert(post.text)
+          console.log(post.text)
+        })
     },
     computed: {
       meetupCreator () {

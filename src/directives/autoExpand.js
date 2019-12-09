@@ -10,6 +10,6 @@ export default {
     el.addEventListener('keydown', el.__AutoResizer__)
   },
   unbind(el) {
-    el.removeEventListender('keydown', el.__AutoResizer__)
+    el.removeEventListener('keydown', el.__AutoResizer__)
   }
 }

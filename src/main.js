@@ -24,9 +24,14 @@ Vue.filter('capitalize', (word = '') => `${word.charAt(0).toUpperCase()}${word.s
 
 Vue.filter('formatDate', (value = '', formatType = 'LL') => moment(value).format(formatType))
 
-io('http://localhost:3001')
+const socket = io('http://localhost:3001')
 
 new Vue({
+  data() {
+    return {
+      socket
+    }
+  },
   router,
   store,
   vuelidate,
