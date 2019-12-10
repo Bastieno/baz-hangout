@@ -13,7 +13,7 @@
               <span class="title is-bold">{{user.name}}</span>
               <br/>
               <!-- Here will be user update functionality -->
-              <button class="button is-primary is-outlined m-t-sm">Update Info</button>
+              <UserUpdateModal />
               <br/>
             </p>
             <!-- TODO: User Info Here if any -->
@@ -127,9 +127,13 @@
 </template>
 
 <script>
+import UserUpdateModal from '../components/UserUpdateModal'
 import { mapState, mapGetters } from 'vuex'
 
 export default {
+  components: {
+    UserUpdateModal
+  },
   created() {
     this.$store.dispatch('stats/fetchUserStats')
   },
