@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 import PageHome from '../pages/PageHome'
+import PageProfile from '../pages/PageProfile'
 import PageMeetupDetail from '../pages/PageMeetupDetail'
 import PageMeetupFind from '../pages/PageMeetupFind'
 import PageMeetupCreate from '../pages/PageMeetupCreate'
@@ -21,6 +22,12 @@ const router = new Router({
       path: '/',
       name: 'PageHome',
       component: PageHome
+    },
+    {
+      path: '/me',
+      name: 'PageProfile',
+      component: PageProfile,
+      meta: { onlyAuthUser: true }
     },
     {
       path: '/meetups/secret',
