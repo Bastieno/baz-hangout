@@ -22,24 +22,36 @@
             </p>
           </div>
           <!-- TODO: Set Active Tab to 'meetups' and class to 'isActive' -->
-          <div class="stats-tab column is-2-tablet is-4-mobile has-text-centered">
+          <div
+            class="stats-tab column is-2-tablet is-4-mobile has-text-centered"
+            :class="{isActive: activeTab === 'meetups'}"
+            @click="activeTab='meetups'"
+          >
             <p class="stat-val">{{meetupsCount}}</p>
             <p class="stat-key">Meetups</p>
           </div>
           <!-- TODO: Set Active Tab to 'threads' and class to 'isActive' -->
-          <div class="stats-tab column is-2-tablet is-4-mobile has-text-centered">
+          <div
+            class="stats-tab column is-2-tablet is-4-mobile has-text-centered"
+            :class="{isActive: activeTab === 'threads'}"
+            @click="activeTab='threads'"
+          >
             <p class="stat-val">{{threadsCount}}</p>
             <p class="stat-key">Threads</p>
           </div>
           <!-- TODO: Set Active Tab to 'posts' and class to 'isActive' -->
-          <div class="stats-tab column is-2-tablet is-4-mobile has-text-centered">
+          <div
+            class="stats-tab column is-2-tablet is-4-mobile has-text-centered"
+            :class="{isActive: activeTab === 'posts'}"
+            @click="activeTab='posts'"
+          >
             <p class="stat-val">{{postsCount}}</p>
             <p class="stat-key">Posts</p>
           </div>
         </div>
       </div>
       <!-- TODO: Display this div when activeTab === 'meetups' -->
-      <div class="columns is-mobile is-multiline">
+      <div v-if="activeTab === 'meetups'" class="columns is-mobile is-multiline">
         <!-- TODO: Iterate over meetups -->
         <div v-for="meetup in meetups" :key='meetup._id' class="column is-3-tablet is-6-mobile">
           <!-- MEETUPS -->
@@ -71,7 +83,7 @@
         </div>
       </div>
       <!-- TODO: Display this div when activeTab === 'threads' -->
-      <div class="columns is-mobile is-multiline">
+      <div v-if="activeTab === 'threads'" class="columns is-mobile is-multiline">
         <div v-for="thread in threads" :key="thread._id" class="column is-3-tablet is-6-mobile">
           <!-- THREADS -->
           <div class="card">
@@ -91,7 +103,7 @@
         </div>
       </div>
       <!-- TODO: Display this div when activeTab === 'posts' -->
-      <div class="columns is-mobile is-multiline">
+      <div v-if="activeTab === 'posts'" class="columns is-mobile is-multiline">
         <div v-for="post in posts" :key="post._id" class="column is-3-tablet is-6-mobile">
           <!-- POSTS -->
           <div class="card">
@@ -120,6 +132,11 @@ import { mapState, mapGetters } from 'vuex'
 export default {
   created() {
     this.$store.dispatch('stats/fetchUserStats')
+  },
+  data() {
+    return {
+      activeTab: 'meetups'
+    }
   },
   computed:{
     ...mapGetters({
