@@ -126,7 +126,9 @@
 
 <script>
 export default {
-
+  created() {
+    this.$store.dispatch('stats/fetchUserStats')
+  }
 }
 </script>
 
