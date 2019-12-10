@@ -13,7 +13,7 @@
               <span class="title is-bold">{{user.name}}</span>
               <br/>
               <!-- Here will be user update functionality -->
-              <UserUpdateModal :authUser="user" />
+              <UserUpdateModal :authUser="user" @userSubmitted="updateUser" />
               <br/>
             </p>
             <!-- TODO: User Info Here if any -->
@@ -154,6 +154,19 @@ export default {
       threadsCount: state => state.stats.threads.count,
       postsCount: state => state.stats.posts.count,
     })
+  },
+  methods: {
+    updateUser({user, done}) {
+      this.$store.dispatch('auth/updateUser', user)
+        .then(() => {
+          this.$toasted.success('Profile updated successfully', {duration: 3000})
+          done()
+        })
+        .catch(error => {
+          console.log(error)
+          this.$toasted.error('This operation failed. Please try again', {duration: 3000})
+        })
+    }
   }
 
 }

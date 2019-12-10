@@ -91,6 +91,15 @@ export default {
         commit('setAuthUser', null)
         resolve(true)
       })
+    },
+
+    updateUser({commit}, user) {
+      return axiosInstance.patch(`/api/v1/users/${user._id}`, user)
+        .then((res) => {
+          const updatedUser = res.data
+          commit('setAuthUser', updatedUser)
+          return updatedUser
+        })
     }
   },
   mutations: {
