@@ -119,13 +119,17 @@
     },
     data() {
       return {
-        isDataLoaded: false
+        isDataLoaded: false,
+        threadPageNum: 1,
+        threadPageSize: 5
       }
     },
     created () {
       const meetupId = this.$route.params.id
 
-      Promise.all([this.fetchMeetup(meetupId), this.fetchThreads(meetupId)])
+      this.fetchThreadsHandler({meetupId})
+
+      Promise.all([this.fetchMeetup(meetupId)])
         .then(() => this.isDataLoaded = true)
         .catch(error => {
           console.error(error)
@@ -176,6 +180,15 @@
     methods: {
       ...mapActions('meetups', ['fetchMeetup']),
       ...mapActions('threads', ['fetchThreads', 'postThread', 'addPostToThread']),
+      fetchThreadsHandler({meetupId}) {
+        const filter = {
+          pageNum: this.threadPageNum,
+          pageSize: this.threadPageSize
+        }
+
+        this.fetchThreads({meetupId, filter})
+          .then(() => this.threadPageNum += 1)
+      },
       joinMeetup() {
         this.$store.dispatch('meetups/joinMeetup', this.meetup._id)
           .then(() => this.$toasted.success('Thanks for joining this hangout', {duration: 5000}))
