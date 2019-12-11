@@ -2,7 +2,7 @@
   <div v-if="isAuthResolved && isLocationResolved" id="app">
     <TheNavbar />
     <div class="page-wrapper">
-      <router-view />
+      <router-view :key="$router.path" />
     </div>
     <TheFooter />
   </div>

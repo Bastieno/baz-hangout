@@ -19,6 +19,9 @@
               <div v-if="searchedLocation && meetups && meetups.length" class="level-item">
                 <span>Meetups in {{meetups[0].location}}</span>
               </div>
+              <div v-if="category" class="level-item">
+                <button @click="cancelCategoryQueryParams" class="button is-danger">{{category}} X</button>
+              </div>
             </div>
             <div class="level-right">
               <div class="level-item">
@@ -67,6 +70,12 @@
 <script>
   import { mapState } from 'vuex'
   export default {
+    props: {
+      category: {
+        type: String,
+        required: false
+      }
+    },
     data() {
       return {
         isDataLoaded: false,
@@ -87,6 +96,11 @@
         if (this.searchedLocation) {
           this.filter['location'] = this.searchedLocation.toLowerCase().replace(/[\s,]+/g, '').trim()
         }
+
+        if (this.category) {
+          this.filter['category'] = this.category
+        }
+
         this.$store.dispatch('meetups/fetchMeetups', {filter: this.filter})
           .then(() => this.isDataLoaded = true)
           .catch(error => {
@@ -94,6 +108,9 @@
             this.$toasted.error('Something went wrong', {duration: 3000})
             this.isDataLoaded = true
           })
+      },
+      cancelCategoryQueryParams() {
+        this.$router.push({name: 'PageMeetupFind'})
       }
     }
   }

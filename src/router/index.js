@@ -52,6 +52,12 @@ const router = new Router({
       component: PageMeetupFind
     },
     {
+      path: '/find/:category',
+      name: 'PageMeetupFindCategory',
+      component: PageMeetupFind,
+      props: true
+    },
+    {
       path: '/login',
       name: 'PageLogin',
       component: PageLogin,
