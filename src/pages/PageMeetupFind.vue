@@ -8,7 +8,13 @@
           <div class="level">
             <div class="level-left">
               <div class="level-item">
-                <input v-model="searchedLocation" type="text" class="input" placeholder="New York">
+                <input
+                  @keyup.enter="fetchMeetups"
+                  v-model="searchedLocation"
+                  type="text"
+                  class="input"
+                  placeholder="New York"
+                >
               </div>
               <div v-if="searchedLocation && meetups && meetups.length" class="level-item">
                 <span>Meetups in {{meetups[0].location}}</span>
@@ -26,7 +32,7 @@
     </div>
     <div v-if='isDataLoaded' class="container">
       <section class="section page-find">
-        <div class="columns cover is-multiline">
+        <div v-if="meetups && meetups.length" class="columns cover is-multiline">
           <div v-for="meetup of meetups" :key="meetup._id" class="column is-one-third" :style="{'min-height': '160px'}">
             <router-link :to="'/meetups/' + meetup._id" class="meetup-card-find"
                :style="{'background-image': `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${meetup.image})`}">
@@ -47,8 +53,8 @@
             </router-link>
           </div>
         </div>
-        <div>
-          <span class="tag is-warning is-large">No meetups found :( You might try to change search criteria (:</span>
+        <div v-else>
+          <span class="tag is-warning is-large">No meetups found 😞. You might try to change search criteria</span>
         </div>
       </section>
     </div>
@@ -59,21 +65,17 @@
 </template>
 
 <script>
-  import { mapState, mapActions } from 'vuex'
+  import { mapState } from 'vuex'
   export default {
     data() {
       return {
         isDataLoaded: false,
-        searchedLocation: this.$store.getters['meta/location']
+        searchedLocation: this.$store.getters['meta/location'],
+        filter: {}
       }
     },
     created () {
       this.fetchMeetups()
-        .then(() => this.isDataLoaded = true)
-        .catch(error => {
-          console.error(error)
-          this.isDataLoaded = true
-        })
     },
     computed: {
       ...mapState({
@@ -81,7 +83,18 @@
       })
     },
     methods: {
-      ...mapActions('meetups', ['fetchMeetups'])
+      fetchMeetups() {
+        if (this.searchedLocation) {
+          this.filter['location'] = this.searchedLocation.toLowerCase().replace(/[\s,]+/g, '').trim()
+        }
+        this.$store.dispatch('meetups/fetchMeetups', {filter: this.filter})
+          .then(() => this.isDataLoaded = true)
+          .catch(error => {
+            console.log(error)
+            this.$toasted.error('Something went wrong', {duration: 3000})
+            this.isDataLoaded = true
+          })
+      }
     }
   }
 </script>
