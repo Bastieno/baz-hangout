@@ -10,12 +10,14 @@ export default {
     items: []
   },
   actions: {
-    fetchThreads({ state, commit }, { meetupId, filter = {}} ) {
+    fetchThreads({ state, commit }, { meetupId, filter = {}, init } ) {
+      if (init) commit('setData', {items: []})
+
       const url = applyFilters(`/api/v1/threads?meetupId=${meetupId}`, filter)
       return axios.get(url)
         .then(response => {
           const {threads, isAllDataLoaded }= response.data
-          commit('setData', { resource: 'items', data: threads })
+          commit('mergeThreads', threads)
           commit('setAllDataLoaded', isAllDataLoaded)
           return state.items
         })
@@ -57,8 +59,11 @@ export default {
     }
   },
   mutations: {
-    setData(state, { resource, data }) {
-      state[resource] = data
+    setData(state, {items}) {
+      state.items = items
+    },
+    mergeThreads(state, threads) {
+      state.items = [...state.items, ...threads]
     },
     addThreadToArray(state, { resource, index, createdThread }) {
       Vue.set(state[resource], index, createdThread )
