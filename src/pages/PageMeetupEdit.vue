@@ -27,7 +27,11 @@
         <div class="is-pulled-right">
           <!-- Update Button -->
           <button
-            class="button is-success is-large">Update</button>
+            @click="updateMeetup"
+            class="button is-success is-large"
+          >
+            Update
+          </button>
         </div>
       </div>
     </section>
@@ -114,6 +118,7 @@ export default {
   },
   data() {
     return {
+      meetup: {},
       disabledDates: {
         customPredictor: function(date) {
           const today = new Date()
@@ -127,15 +132,6 @@ export default {
     this.fetchMeetupHandler()
   },
   computed: {
-    meetup() {
-      const meetup = this.$store.state.meetups.item
-      if (this.hasValue(meetup)) {
-        const timeFrom = this.parseTime(meetup.timeFrom)
-        const timeTo = this.parseTime(meetup.timeTo)
-        return {...meetup, timeFrom, timeTo}
-      }
-      return {}
-    },
     meetupCreator() {
       return this.meetup.meetupCreator || {}
     },
@@ -148,6 +144,11 @@ export default {
     fetchMeetupHandler() {
       this.fetchMeetup(this.meetupId)
       .then((meetup) => {
+        const timeFrom = this.parseTime(meetup.timeFrom)
+        const timeTo = this.parseTime(meetup.timeTo)
+
+        this.meetup = {...meetup, timeFrom, timeTo}
+
         if (meetup.meetupCreator._id !== this.authUser._id) {
           this.$router.push({path: '/not-authorized'})
         }
@@ -166,8 +167,16 @@ export default {
       const minutes = data.mm || '00'
       this.meetup[field] = `${hour}:${minutes}`
     },
-    hasValue(meetup) {
-      return Object.keys(meetup).length
+    updateMeetup() {
+      this.$store.dispatch('meetups/updateMeetup', this.meetup)
+        .then((updatedMeetup) => {
+          this.$toasted.success('Meetup updated successfully', {duration: 3000})
+          this.$router.push({path: `/meetups/${updatedMeetup._id}`})
+        })
+        .catch(err => {
+          console.log(err)
+          this.$toasted.error('Meetup updated failed. Please try again', {duration: 3000})
+        })
     }
   }
 }

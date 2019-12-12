@@ -60,6 +60,15 @@ export default {
           commit('removeUserFromMeetup', joinedPeople.filter((joinedUser) => joinedUser._id !== user._id))
           return true
         })
+    },
+    updateMeetup({commit}, meetup) {
+      meetup.processedLocation = meetup.location.toLowerCase().replace(/[\s,]+/g, '').trim()
+      return axiosInstance.patch(`/api/v1/meetups/${meetup._id}`, meetup)
+        .then(res => {
+          const updatedMeetup = res.data
+          commit('setData', {resource: 'item', data: updatedMeetup})
+          return updatedMeetup
+        })
     }
   },
   mutations: {
