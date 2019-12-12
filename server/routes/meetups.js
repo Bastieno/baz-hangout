@@ -12,4 +12,6 @@ router.post('', AuthCtrl.onlyAuthUsers, MeetupsCtrl.createMeetup);
 router.post('/:id/join', AuthCtrl.onlyAuthUsers, MeetupsCtrl.joinMeetup);
 router.post('/:id/leave', AuthCtrl.onlyAuthUsers, MeetupsCtrl.leaveMeetup);
 
+router.patch('/:id', AuthCtrl.onlyAuthUsers, MeetupsCtrl.updateMeetup)
+
 module.exports = router;
