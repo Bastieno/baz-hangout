@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import vuelidate from 'vuelidate'
-import Toasted from 'vue-toasted';
-import moment from 'moment'
+import Toasted from 'vue-toasted'
 import App from './App.vue'
 import AppDropdown from './components/shared/AppDropdown'
 import AppHero from './components/shared/AppHero'
@@ -10,6 +9,7 @@ import AppSpinner from './components/shared/AppSpinner'
 import router from './router'
 import store from './store'
 import AppSocket from './plugins/socket'
+import filters from './filters'
 
 Vue.config.productionTip = false
 
@@ -21,11 +21,7 @@ Vue.use(vuelidate)
 Vue.use(Toasted)
 Vue.use(AppSocket, {connection: 'http://localhost:3001'})
 
-Vue.filter('capitalize', (word = '') => `${word.charAt(0).toUpperCase()}${word.slice(1)}`)
-
-Vue.filter('formatDate', (value = '', formatType = 'LL') => moment(value).format(formatType))
-
-Vue.filter('fromNow', (value = '') => moment(value).fromNow())
+filters()
 
 new Vue({
   router,
