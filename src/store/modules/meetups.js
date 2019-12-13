@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import axios from 'axios'
 import axiosInstance  from '../../services/axios'
-import { applyFilters } from '../../helpers'
+import { applyFilters, processLocation } from '../../helpers'
 
 export default {
   namespaced: true,
@@ -32,7 +32,7 @@ export default {
       // Make a request to api
       const { user } = rootState.auth
       meetupData.meetupCreator = user
-      meetupData.processedLocation = meetupData.location.toLowerCase().replace(/[\s,]+/g, '').trim()
+      meetupData.processedLocation = processLocation(meetupData.location)
 
       return axiosInstance.post('/api/v1/meetups', meetupData)
         .then((res) => res.data)
@@ -62,7 +62,7 @@ export default {
         })
     },
     updateMeetup({commit}, meetup) {
-      meetup.processedLocation = meetup.location.toLowerCase().replace(/[\s,]+/g, '').trim()
+      meetup.processedLocation = processLocation(meetup.location)
       return axiosInstance.patch(`/api/v1/meetups/${meetup._id}`, meetup)
         .then(res => {
           const updatedMeetup = res.data

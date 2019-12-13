@@ -69,6 +69,8 @@
 
 <script>
   import { mapState } from 'vuex'
+  import { processLocation } from '../helpers'
+
   export default {
     props: {
       category: {
@@ -94,7 +96,7 @@
     methods: {
       fetchMeetups() {
         if (this.searchedLocation) {
-          this.filter['location'] = this.searchedLocation.toLowerCase().replace(/[\s,]+/g, '').trim()
+          this.filter['location'] = processLocation(this.searchedLocation)
         }
 
         if (this.category) {

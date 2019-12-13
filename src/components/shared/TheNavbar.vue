@@ -11,7 +11,7 @@
       </a>
     </div>
 
-    <div id="navbarBasicExample" class="navbar-menu">
+    <div id="navbarBasicExample" class="navbar-menu is-active">
       <div class="navbar-start">
         <router-link :to="'/'" class="navbar-item">
           Home
@@ -59,7 +59,7 @@
                 Profile
             </router-link>
             <hr class="navbar-divider">
-            <a @click="logout" class="navbar-item">
+            <a @click.prevent="logout" class="navbar-item">
                 Logout
             </a>
           </div>
