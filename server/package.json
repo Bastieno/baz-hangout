@@ -1,0 +1,17 @@
+{
+  "name": "baz-hangout-backend",
+  "version": "1.0.0",
+  "description": "This is the backend of the baz-hangout application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "keywords": [
+    "meetups",
+    "hangouts",
+    "chatting"
+  ],
+  "author": "Francis Nduamaka",
+  "license": "ISC"
+}
