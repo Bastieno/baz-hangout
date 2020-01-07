@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
-const config = require('../config/dev')
+const config = require('../config')
 
 const userSchema = new Schema({
   avatar: String,

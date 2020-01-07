@@ -1,7 +1,8 @@
+const path = require('path');
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const config = require('./config/dev');
+const config = require('./config');
 
 require('./models/meetups');
 require('./models/users');
@@ -37,6 +38,15 @@ app.use('/api/v1/users', usersRoutes);
 app.use('/api/v1/posts', postsRoutes);
 app.use('/api/v1/threads', threadsRoutes);
 app.use('/api/v1/categories', categoriesRoutes);
+
+if (process.env.NODE_ENV === 'production') {
+  const appPath = path.join(__dirname, '..', 'dist');
+  app.use(express.static(appPath));
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(appPath, 'index.html'));
+  });
+}
 
 const PORT = process.env.PORT || 3001;
 

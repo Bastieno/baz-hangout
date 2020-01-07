@@ -7,7 +7,6 @@
         <h1 class="title is-inline">Featured Hangouts
           <span v-if="ipLocation"> in {{ipLocation}}</span>
         </h1>
-        <AppDropdown />
         <router-link v-if="user" :to="{name:'PageMeetupCreate'}" class="button is-primary is-pulled-right m-r-sm">Create Hangouts</router-link>
         <router-link :to="'/find'" class="button is-primary is-pulled-right m-r-sm">All</router-link>
       </div>
