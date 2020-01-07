@@ -60,4 +60,8 @@ export default {
       box-shadow: 2px 4px 15px -2px rgba(189,189,180,1);
     }
   }
+
+  .card.large.is-hoverable {
+    height: 100%;
+  }
 </style>

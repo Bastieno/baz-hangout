@@ -12,7 +12,9 @@ export default {
   getters: {
     location(state) {
       const { city, country } = state.item
-      return (city && country) ? `${city}, ${country}` : ''
+      console.log('city', city)
+      console.log('country', country)
+      return null
     }
   },
   actions: {

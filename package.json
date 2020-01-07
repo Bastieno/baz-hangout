@@ -6,7 +6,9 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "dev:server": "nodemon ./server/index.js"
+    "dev:server": "nodemon ./server/index.js",
+    "start": "node ./server/index.js",
+    "heroku-postbuild": "npm run build"
   },
   "dependencies": {
     "algoliasearch": "^3.35.1",
